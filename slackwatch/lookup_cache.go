@@ -14,7 +14,6 @@ func (s slackwatch) getCachedUser(id string) string {
 		return nick
 	}
 
-	fmt.Println("Looking up ", id)
 	user, err := s.api.GetUserInfo(id)
 	if err != nil {
 		return ""
@@ -34,7 +33,6 @@ func (s slackwatch) getCachedConversation(id string) string {
 		return conv
 	}
 
-	fmt.Println("Looking up ", id)
 	info, err := s.api.GetConversationInfo(id, false)
 	if err != nil {
 		fmt.Printf("Error Looking up Conversation: %v\n", err)
