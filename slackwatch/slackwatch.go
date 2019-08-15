@@ -99,8 +99,8 @@ func (s slackwatch) messageReceived(msg *slack.MessageEvent) {
 	} else {
 		if *s.outputAll {
 			string := m.asString()
-			if len(string) > 80 {
-				string = string[:80]
+			if len(string) > 60 {
+				string = string[:60]
 			}
 			log.Print(string)
 		}
