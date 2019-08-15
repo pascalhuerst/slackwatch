@@ -1,3 +1,16 @@
+// Package slackwatch preforms configfured actions when DMed on Slack
+// Out of the box, it expects a JSON formatted config file named .slackwatch
+// in your home directory.
+//
+//   {
+//     "SlackToken": "xoxp-123-543",
+//     "Actions": [
+//       { "Command": "/usr/bin/afplay", "Args": "klaxon.wav" },
+//       { "URL": "https://hassio.local/api/services/homeassistant/turn_on?api_password=letmein",
+//         "Body": "{\"entity_id\":\"switch.bat_signal\"}"
+//       }
+//     ]
+//   }
 package slackwatch
 
 import (
@@ -17,6 +30,7 @@ type slackwatch struct {
 	config             *Config
 }
 
+// New creates a slackwatch instance
 func New(config Config) slackwatch {
 	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
 	s := slackwatch{

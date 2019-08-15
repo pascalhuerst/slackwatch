@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// Action is preformed when an interesting message is received.  There are
+// curently two types of actions, Command, and URL. For URLs, if Body is
+// provided an HTTP Post is performed, otherwise an HTTP Get.
 type Action struct {
 	Command string
 	Args    string
