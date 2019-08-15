@@ -65,6 +65,9 @@ func (m message) isInteresting() bool {
 	if m.channel == "DM" {
 		return true
 	}
+	if strings.HasPrefix(m.channel, "mpdm-") {
+		return true
+	}
 
 	if strings.Contains(m.text, m.sw.me.ID) {
 		return true
