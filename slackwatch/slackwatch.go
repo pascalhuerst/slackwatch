@@ -1,7 +1,6 @@
 package slackwatch
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/nlopes/slack"
@@ -41,6 +40,9 @@ func (s slackwatch) Run() {
 			log.Print("Connected")
 			s.me = ev.Info.User
 
+		case *slack.DisconnectedEvent:
+			log.Print("Disconnected")
+
 		case *slack.MessageEvent:
 			s.messageReceived(ev)
 
@@ -78,11 +80,15 @@ func (s slackwatch) messageReceived(msg *slack.MessageEvent) {
 	}
 
 	if m.isInteresting() {
-		fmt.Println(m.asString())
+		log.Print(m.asString())
 		s.alert()
 	} else {
 		if *s.outputAll {
-			fmt.Println(m.asString())
+			string := m.asString()
+			if len(string) > 80 {
+				string = string[:80]
+			}
+			log.Print(string)
 		}
 	}
 }

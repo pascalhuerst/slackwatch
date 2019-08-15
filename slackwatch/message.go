@@ -46,9 +46,8 @@ func (m message) asString() string {
 		interesting = "*"
 	}
 
-	return fmt.Sprintf("%s %s [%s] <%s> %s",
+	return fmt.Sprintf("%s [%s] <%s> %s",
 		interesting,
-		m.timestamp,
 		m.channel,
 		m.user,
 		m.detokenizedText())
