@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -18,7 +18,7 @@ func main() {
 func runSlackwatch() {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Recovered from panic:", r)
+			log.Print("Recovered from panic:", r)
 		}
 	}()
 
