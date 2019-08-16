@@ -5,30 +5,30 @@ import (
 	"strings"
 )
 
-func (s slackwatch) processCommand(m message) bool {
-	if !strings.HasPrefix(m.text, "!") {
+func (s slackwatch) processCommand(m Message) bool {
+	if !strings.HasPrefix(m.Text, "!") {
 		return false
 	}
 
-	switch m.text {
+	switch m.Text {
 	case "!arm":
 		*s.armed = true
-		s.sendStatus(m.channelID)
+		s.sendStatus(m.ChannelID)
 	case "!disarm":
 		*s.armed = false
-		s.sendStatus(m.channelID)
+		s.sendStatus(m.ChannelID)
 	case "!verbose":
 		*s.outputAll = true
-		s.sendStatus(m.channelID)
+		s.sendStatus(m.ChannelID)
 	case "!quiet":
 		*s.outputAll = false
-		s.sendStatus(m.channelID)
+		s.sendStatus(m.ChannelID)
 	case "!status":
-		s.sendStatus(m.channelID)
+		s.sendStatus(m.ChannelID)
 	case "!help":
-		s.sendHelp(m.channelID)
+		s.sendHelp(m.ChannelID)
 	default:
-		s.rtm.SendMessage(s.rtm.NewOutgoingMessage("Invalid Command", m.channelID))
+		s.rtm.SendMessage(s.rtm.NewOutgoingMessage("Invalid Command", m.ChannelID))
 	}
 
 	return true

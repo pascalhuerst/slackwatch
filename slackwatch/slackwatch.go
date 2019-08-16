@@ -93,18 +93,18 @@ func (s slackwatch) messageReceived(msg *slack.MessageEvent) {
 
 	m := newMessage(msg.Timestamp, msg.Channel, msg.User, msg.Text, &s)
 
-	if m.isFromMe() && m.channel == "DM" {
+	if m.IsFromMe() && m.Channel == "DM" {
 		if s.processCommand(m) {
 			return
 		}
 	}
 
-	if m.isInteresting() {
-		log.Print(m.asString())
+	if m.IsInteresting() {
+		log.Print(m.String())
 		s.alert()
 	} else {
 		if *s.outputAll {
-			string := m.asString()
+			string := m.String()
 			if len(string) > 60 {
 				string = string[:60]
 			}

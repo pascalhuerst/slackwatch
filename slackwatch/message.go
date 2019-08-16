@@ -8,24 +8,25 @@ import (
 	"time"
 )
 
-type message struct {
-	timestamp string
-	channelID string
-	channel   string
-	userID    string
-	user      string
-	text      string
+// Message represents an incomming message
+type Message struct {
+	Timestamp string
+	ChannelID string // of the form C02G9FMGB
+	Channel   string // without preceeding #
+	UserID    string // of the form U3L6DT8P3
+	User      string
+	Text      string // raw text of the message, you probably want DetokenizedText()
 	sw        *slackwatch
 }
 
-func newMessage(timestamp string, channel string, user string, text string, sw *slackwatch) message {
-	m := message{
-		timestamp: ts(timestamp),
-		channelID: channel,
-		channel:   sw.getCachedConversation(channel),
-		userID:    user,
-		user:      sw.getCachedUser(user),
-		text:      text,
+func newMessage(timestamp string, channel string, user string, text string, sw *slackwatch) Message {
+	m := Message{
+		Timestamp: ts(timestamp),
+		ChannelID: channel,
+		Channel:   sw.getCachedConversation(channel),
+		UserID:    user,
+		User:      sw.getCachedUser(user),
+		Text:      text,
 		sw:        sw,
 	}
 	return m
@@ -40,43 +41,46 @@ func ts(ts string) string {
 	return tm.Format("15:04:05")
 }
 
-func (m message) asString() string {
+func (m Message) String() string {
 	interesting := " "
-	if m.isInteresting() {
+	if m.IsInteresting() {
 		interesting = "*"
 	}
 
 	return fmt.Sprintf("%s [%s] <%s> %s",
 		interesting,
-		m.channel,
-		m.user,
-		m.detokenizedText())
+		m.Channel,
+		m.User,
+		m.DetokenizedText())
 }
 
-func (m message) isFromMe() bool {
-	if m.userID == m.sw.me.ID {
+// IsFromMe returns true if the user our API token belongs to sent the message.
+func (m Message) IsFromMe() bool {
+	if m.UserID == m.sw.me.ID {
 		return true
 	}
 	return false
 }
 
-func (m message) isInteresting() bool {
-	if m.channel == "DM" {
+// IsInteresting returns true if we were mentioned or this is a DM.
+func (m Message) IsInteresting() bool {
+	if m.Channel == "DM" {
 		return true
 	}
-	if strings.HasPrefix(m.channel, "mpdm-") {
+	if strings.HasPrefix(m.Channel, "mpdm-") {
 		return true
 	}
 
-	if strings.Contains(m.text, m.sw.me.ID) {
+	if strings.Contains(m.Text, m.sw.me.ID) {
 		return true
 	}
 
 	return false
 }
 
-func (m message) detokenizedText() string {
-	t := m.text
+// DetokenizedText replaces user mentions with their name instead of their ID.
+func (m Message) DetokenizedText() string {
+	t := m.Text
 	re := regexp.MustCompile("<@(\\w+)>")
 	matches := re.FindAllStringSubmatch(t, -1)
 
