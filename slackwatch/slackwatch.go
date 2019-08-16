@@ -1,4 +1,4 @@
-// Package slackwatch preforms configfured actions when DMed on Slack
+// Package slackwatch preforms configfured actions when DMed on Slack.
 // Out of the box, it expects a JSON formatted config file named .slackwatch
 // in your home directory.
 //
@@ -67,6 +67,12 @@ func (s slackwatch) Run() {
 			}
 			s.alert()
 			log.Print("* Joined to new channel", name)
+
+		case *slack.IncomingEventError:
+			log.Printf("Incoming Event Error: %v", ev)
+
+		case *slack.ConnectionErrorEvent:
+			log.Printf("Connection Error: %v", ev)
 
 		case *slack.RTMError:
 			log.Printf("Error: %s\n", ev.Error())
