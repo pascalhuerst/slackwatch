@@ -6,6 +6,6 @@ func (s slackwatch) alert() {
 	}
 
 	for _, action := range s.config.Actions {
-		go action.execute()
+		go action.Execute()
 	}
 }

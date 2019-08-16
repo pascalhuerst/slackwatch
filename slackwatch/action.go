@@ -7,17 +7,22 @@ import (
 	"strings"
 )
 
-// Action is preformed when an interesting message is received.  There are
-// curently two types of actions, Command, and URL. For URLs, if Body is
-// provided an HTTP Post is performed, otherwise an HTTP Get.
-type Action struct {
+// An Action 's execute method is called when an interesting message is received.
+type Action interface {
+	Execute()
+}
+
+// DefaultAction supports two types of common actions, Command, and URL. For
+// URLs, if Body is provided an HTTP Post is performed, otherwise an HTTP Get.
+type DefaultAction struct {
 	Command string
 	Args    string
 	URL     string
 	Body    string
 }
 
-func (a Action) execute() {
+// Execute runs the specified command or preforms an HTTP request.
+func (a DefaultAction) Execute() {
 	if a.Command != "" {
 		a.runCommand()
 	}
@@ -30,7 +35,7 @@ func (a Action) execute() {
 	}
 }
 
-func (a Action) runCommand() {
+func (a DefaultAction) runCommand() {
 	cmd := exec.Command(a.Command, a.Args)
 	err := cmd.Run()
 	if err != nil {
@@ -38,7 +43,7 @@ func (a Action) runCommand() {
 	}
 }
 
-func (a Action) postURL() {
+func (a DefaultAction) postURL() {
 	res, err := http.Post(a.URL, "application/octet-stream", strings.NewReader(a.Body))
 	if err != nil {
 		fmt.Println("Error POSTing", a.URL, err)
@@ -46,7 +51,7 @@ func (a Action) postURL() {
 	res.Body.Close()
 }
 
-func (a Action) getURL() {
+func (a DefaultAction) getURL() {
 	res, err := http.Get(a.URL)
 	if err != nil {
 		fmt.Println("Error GETing", a.URL, err)

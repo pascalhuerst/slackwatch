@@ -8,7 +8,7 @@ import (
 // Config is passed to the New constructor.
 type Config struct {
 	SlackToken string
-	Actions    []*Action
+	Actions    []*DefaultAction
 }
 
 // NewConfigFromFile parses a json formatted config file and returns a Config.
