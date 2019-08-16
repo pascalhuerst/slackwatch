@@ -65,7 +65,7 @@ func (s slackwatch) Run() {
 			if name == "" {
 				name = "DM"
 			}
-			s.alert()
+			s.alert(Message{Channel: ev.Channel.Name, Text: "Channel Joined"})
 			log.Print("* Joined to new channel", name)
 
 		case *slack.IncomingEventError:
@@ -101,7 +101,7 @@ func (s slackwatch) messageReceived(msg *slack.MessageEvent) {
 
 	if m.IsInteresting() {
 		log.Print(m.String())
-		s.alert()
+		s.alert(m)
 	} else {
 		if *s.outputAll {
 			string := m.String()

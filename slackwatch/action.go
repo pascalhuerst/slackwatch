@@ -9,7 +9,7 @@ import (
 
 // An Action 's execute method is called when an interesting message is received.
 type Action interface {
-	Execute()
+	Execute(Message)
 }
 
 // DefaultAction supports two types of common actions, Command, and URL. For
@@ -22,7 +22,7 @@ type DefaultAction struct {
 }
 
 // Execute runs the specified command or preforms an HTTP request.
-func (a DefaultAction) Execute() {
+func (a DefaultAction) Execute(m Message) {
 	if a.Command != "" {
 		a.runCommand()
 	}
