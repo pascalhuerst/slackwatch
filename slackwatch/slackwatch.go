@@ -41,11 +41,11 @@ func New(config Config) slackwatch {
 		outputAll:          &[]bool{false}[0],
 		config:             &config,
 	}
+	s.rtm = s.api.NewRTM()
 	return s
 }
 
 func (s slackwatch) Run() {
-	s.rtm = s.api.NewRTM()
 	go s.rtm.ManageConnection()
 
 	for msg := range s.rtm.IncomingEvents {
@@ -58,7 +58,10 @@ func (s slackwatch) Run() {
 			log.Print("Disconnected")
 
 		case *slack.MessageEvent:
-			s.messageReceived(ev)
+			if ev.Text != "" {
+				m := newMessage(ev.Timestamp, ev.Channel, ev.User, ev.Text, &s)
+				s.messageReceived(m)
+			}
 
 		case *slack.ChannelJoinedEvent:
 			name := ev.Channel.Name
@@ -86,13 +89,7 @@ func (s slackwatch) Run() {
 	}
 }
 
-func (s slackwatch) messageReceived(msg *slack.MessageEvent) {
-	if msg.Text == "" {
-		return
-	}
-
-	m := newMessage(msg.Timestamp, msg.Channel, msg.User, msg.Text, &s)
-
+func (s slackwatch) messageReceived(m Message) {
 	if m.IsFromMe() && m.Channel == "DM" {
 		if s.processCommand(m) {
 			return
