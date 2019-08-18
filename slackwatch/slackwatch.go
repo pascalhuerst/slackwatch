@@ -1,4 +1,4 @@
-// Package slackwatch preforms configfured actions when DMed on Slack.
+// Package slackwatch preforms configured actions when DMed on Slack.
 // Out of the box, it expects a JSON formatted config file named .slackwatch
 // in your home directory.
 //
