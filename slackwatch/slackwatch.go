@@ -84,7 +84,38 @@ func (s slackwatch) Run() {
 			log.Printf("Invalid credentials")
 			return
 
+		// some types we don't care about
+		case *slack.PresenceChangeEvent:
+		case *slack.ManualPresenceChangeEvent:
+		case *slack.LatencyReport:
+		case *slack.HelloEvent:
+		case *slack.ConnectingEvent:
+		case *slack.UserTypingEvent:
+		case *slack.EmojiChangedEvent:
+		case *slack.ReactionAddedEvent:
+		case *slack.ReactionRemovedEvent:
+		case *slack.FilePublicEvent:
+		case *slack.FileSharedEvent:
+		case *slack.FileChangeEvent:
+		case *slack.FileDeletedEvent:
+		case *slack.FileUnsharedEvent:
+		case *slack.UserChangeEvent:
+		case *slack.MemberJoinedChannelEvent:
+		case *slack.MemberLeftChannelEvent:
+		case *slack.DNDUpdatedEvent:
+		case *slack.GroupMarkedEvent:
+		case *slack.ChannelMarkedEvent:
+		case *slack.ChannelCreatedEvent:
+		case *slack.ChannelArchiveEvent:
+		case *slack.IMMarkedEvent:
+		case *slack.PinAddedEvent:
+		case *slack.PinRemovedEvent:
+		case *slack.BotAddedEvent:
+		case *slack.AckMessage:
+		case *slack.PrefChangeEvent:
+
 		default:
+			log.Printf("Unknown Event '%T': %v", ev, ev)
 		}
 	}
 }
