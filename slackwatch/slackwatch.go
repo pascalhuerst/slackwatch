@@ -14,9 +14,8 @@
 package slackwatch
 
 import (
-	"log"
-
 	"github.com/nlopes/slack"
+	log "github.com/sirupsen/logrus"
 )
 
 type slackwatch struct {

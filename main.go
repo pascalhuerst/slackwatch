@@ -1,14 +1,20 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 
 	"slackwatch/slackwatch"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "15:04:05",
+	})
+
 	for {
 		runSlackwatch()
 		time.Sleep(10 * time.Second)
