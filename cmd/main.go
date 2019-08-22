@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/mikegrb/slackwatch/slackwatch"
+	"github.com/mikegrb/slackwatch/pkg/slackwatch"
 	log "github.com/sirupsen/logrus"
 )
 
