@@ -50,11 +50,11 @@ func (s slackwatch) Run() {
 	for msg := range s.rtm.IncomingEvents {
 		switch ev := msg.Data.(type) {
 		case *slack.ConnectedEvent:
-			log.Print("Connected")
+			log.Info("Connected")
 			s.me = ev.Info.User
 
 		case *slack.DisconnectedEvent:
-			log.Print("Disconnected")
+			log.Error("Disconnected")
 
 		case *slack.MessageEvent:
 			if ev.Text != "" {
@@ -68,19 +68,19 @@ func (s slackwatch) Run() {
 				name = "DM"
 			}
 			s.alert(Message{Channel: ev.Channel.Name, Text: "Channel Joined"})
-			log.Print("* Joined to new channel", name)
+			log.Info("* Joined to new channel", name)
 
 		case *slack.IncomingEventError:
-			log.Printf("Incoming Event Error: %v", ev)
+			log.Errorf("Incoming Event Error: %v", ev)
 
 		case *slack.ConnectionErrorEvent:
-			log.Printf("Connection Error: %v", ev)
+			log.Errorf("Connection Error: %v", ev)
 
 		case *slack.RTMError:
-			log.Printf("Error: %s\n", ev.Error())
+			log.Errorf("Error: %s\n", ev.Error())
 
 		case *slack.InvalidAuthEvent:
-			log.Printf("Invalid credentials")
+			log.Fatal("Invalid credentials")
 			return
 
 		// some types we don't care about

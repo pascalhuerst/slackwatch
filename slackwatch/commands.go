@@ -3,6 +3,8 @@ package slackwatch
 import (
 	"fmt"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 func (s slackwatch) processCommand(m Message) bool {
@@ -13,15 +15,19 @@ func (s slackwatch) processCommand(m Message) bool {
 	switch m.Text {
 	case "!arm":
 		*s.armed = true
+		logrus.Info("Armed")
 		s.sendStatus(m.ChannelID)
 	case "!disarm":
 		*s.armed = false
+		logrus.Info("Disarmed")
 		s.sendStatus(m.ChannelID)
 	case "!verbose":
 		*s.outputAll = true
+		logrus.Info("Verbose Set")
 		s.sendStatus(m.ChannelID)
 	case "!quiet":
 		*s.outputAll = false
+		logrus.Info("Quiet Set")
 		s.sendStatus(m.ChannelID)
 	case "!status":
 		s.sendStatus(m.ChannelID)
