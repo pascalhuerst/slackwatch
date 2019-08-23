@@ -8,7 +8,7 @@ import (
 )
 
 func TestIsInteresting(t *testing.T) {
-	sw := slackwatch{me: &slack.UserDetails{ID: "U123"}}
+	sw := Slackwatch{me: &slack.UserDetails{ID: "U123"}}
 	tables := []struct {
 		d string
 		m Message
@@ -29,7 +29,7 @@ func TestIsInteresting(t *testing.T) {
 }
 
 func TestIsFromMe(t *testing.T) {
-	sw := slackwatch{me: &slack.UserDetails{ID: "U123"}}
+	sw := Slackwatch{me: &slack.UserDetails{ID: "U123"}}
 	tables := []struct {
 		d string
 		m Message
@@ -72,7 +72,7 @@ func TestTS(t *testing.T) {
 }
 
 func TestMessage(t *testing.T) {
-	sw := slackwatch{
+	sw := Slackwatch{
 		userLookup: map[string]string{
 			"U123": "user1",
 			"U321": "user2",
