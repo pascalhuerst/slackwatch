@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (s slackwatch) getCachedUser(id string) string {
+func (s Slackwatch) getCachedUser(id string) string {
 	if id == "" {
 		return ""
 	}
@@ -23,7 +23,7 @@ func (s slackwatch) getCachedUser(id string) string {
 	return user.Name
 }
 
-func (s slackwatch) getCachedConversation(id string) string {
+func (s Slackwatch) getCachedConversation(id string) string {
 	if id == "" {
 		return ""
 	}

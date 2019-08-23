@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (s slackwatch) processCommand(m Message) bool {
+func (s Slackwatch) processCommand(m Message) bool {
 	if !strings.HasPrefix(m.Text, "!") {
 		return false
 	}
@@ -40,12 +40,12 @@ func (s slackwatch) processCommand(m Message) bool {
 	return true
 }
 
-func (s slackwatch) sendStatus(channelID string) {
+func (s Slackwatch) sendStatus(channelID string) {
 	status := fmt.Sprintf("armed: %v, outputAll: %v", *s.armed, *s.outputAll)
 	s.rtm.SendMessage(s.rtm.NewOutgoingMessage(status, channelID))
 }
 
-func (s slackwatch) sendHelp(channelID string) {
+func (s Slackwatch) sendHelp(channelID string) {
 	text := "!arm !disarm !verbose !quiet !status !help"
 	s.rtm.SendMessage(s.rtm.NewOutgoingMessage(text, channelID))
 }

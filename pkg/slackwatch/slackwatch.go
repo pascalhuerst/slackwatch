@@ -18,7 +18,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type slackwatch struct {
+// Slackwatch struct holds state. You should call New(config) rather than creating it yourself.
+type Slackwatch struct {
 	userLookup         map[string]string
 	conversationLookup map[string]string
 	me                 *slack.UserDetails
@@ -30,9 +31,9 @@ type slackwatch struct {
 }
 
 // New creates a slackwatch instance
-func New(config Config) slackwatch {
+func New(config Config) Slackwatch {
 	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
-	s := slackwatch{
+	s := Slackwatch{
 		api:                slack.New(config.SlackToken),
 		userLookup:         make(map[string]string),
 		conversationLookup: make(map[string]string),
@@ -44,7 +45,8 @@ func New(config Config) slackwatch {
 	return s
 }
 
-func (s slackwatch) Run() {
+// Run is a blocking call that makes the connection to Slack and handles incoming events.
+func (s Slackwatch) Run() {
 	go s.rtm.ManageConnection()
 
 	for msg := range s.rtm.IncomingEvents {
@@ -119,7 +121,7 @@ func (s slackwatch) Run() {
 	}
 }
 
-func (s slackwatch) messageReceived(m Message) {
+func (s Slackwatch) messageReceived(m Message) {
 	if m.IsFromMe() && m.Channel == "DM" {
 		if s.processCommand(m) {
 			return

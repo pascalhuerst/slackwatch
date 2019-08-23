@@ -16,10 +16,10 @@ type Message struct {
 	UserID    string // of the form U3L6DT8P3
 	User      string
 	Text      string // raw text of the message, you probably want DetokenizedText()
-	sw        *slackwatch
+	sw        *Slackwatch
 }
 
-func newMessage(timestamp string, channel string, user string, text string, sw *slackwatch) Message {
+func newMessage(timestamp string, channel string, user string, text string, sw *Slackwatch) Message {
 	m := Message{
 		Timestamp: ts(timestamp),
 		ChannelID: channel,
