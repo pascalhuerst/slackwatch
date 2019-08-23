@@ -2,7 +2,7 @@ package slackwatch_test
 
 import (
 	"os"
-	"slackwatch/slackwatch"
+	"github.com/mikegrb/slackwatch/pkg/slackwatch"
 )
 
 func Example() {
