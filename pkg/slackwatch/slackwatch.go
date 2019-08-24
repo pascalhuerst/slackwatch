@@ -25,20 +25,19 @@ type Slackwatch struct {
 	me                 *slack.UserDetails
 	api                *slack.Client
 	rtm                *slack.RTM
-	armed              *bool
-	outputAll          *bool
+	armed              bool
+	outputAll          bool
 	config             *Config
 }
 
 // New creates a slackwatch instance
 func New(config Config) *Slackwatch {
-	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
 	s := Slackwatch{
 		api:                slack.New(config.SlackToken),
 		userLookup:         make(map[string]string),
 		conversationLookup: make(map[string]string),
-		armed:              &[]bool{true}[0],
-		outputAll:          &[]bool{false}[0],
+		armed:              true,
+		outputAll:          false,
 		config:             &config,
 	}
 	s.rtm = s.api.NewRTM()
@@ -132,7 +131,7 @@ func (s *Slackwatch) messageReceived(m Message) {
 		log.Print(m.String())
 		s.alert(m)
 	} else {
-		if *s.outputAll {
+		if s.outputAll {
 			string := m.String()
 			if len(string) > 60 {
 				string = string[:60]

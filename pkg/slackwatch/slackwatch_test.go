@@ -29,27 +29,27 @@ func TestSlackwatch(t *testing.T) {
 	sw.conversationLookup["D231"] = "DM"
 	sw.conversationLookup["G123"] = "mpdm--user1--user2--user3--1"
 
-	if *sw.outputAll {
+	if sw.outputAll {
 		t.Error("outputAll began as true")
 	}
 	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", sw))
-	if !*sw.outputAll {
+	if !sw.outputAll {
 		t.Error("outputAll failed to turn on")
 	}
 	sw.messageReceived(newMessage("123", "D231", "U123", "!quiet", sw))
-	if *sw.outputAll {
+	if sw.outputAll {
 		t.Error("outputAll failed to turn off")
 	}
 
-	if !*sw.armed {
+	if !sw.armed {
 		t.Error("armed began as false")
 	}
 	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", sw))
-	if *sw.outputAll {
+	if sw.outputAll {
 		t.Error("armed failed to turn off")
 	}
 	sw.messageReceived(newMessage("123", "D231", "U123", "!arm", sw))
-	if !*sw.armed {
+	if !sw.armed {
 		t.Error("armed failed to turn on")
 	}
 

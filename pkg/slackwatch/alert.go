@@ -1,7 +1,7 @@
 package slackwatch
 
 func (s *Slackwatch) alert(m Message) {
-	if !*s.armed {
+	if !s.armed {
 		return
 	}
 
