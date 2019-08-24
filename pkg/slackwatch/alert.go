@@ -1,6 +1,6 @@
 package slackwatch
 
-func (s Slackwatch) alert(m Message) {
+func (s *Slackwatch) alert(m Message) {
 	if !*s.armed {
 		return
 	}

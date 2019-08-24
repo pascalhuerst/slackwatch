@@ -31,7 +31,7 @@ type Slackwatch struct {
 }
 
 // New creates a slackwatch instance
-func New(config Config) Slackwatch {
+func New(config Config) *Slackwatch {
 	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
 	s := Slackwatch{
 		api:                slack.New(config.SlackToken),
@@ -42,11 +42,11 @@ func New(config Config) Slackwatch {
 		config:             &config,
 	}
 	s.rtm = s.api.NewRTM()
-	return s
+	return &s
 }
 
 // Run is a blocking call that makes the connection to Slack and handles incoming events.
-func (s Slackwatch) Run() {
+func (s *Slackwatch) Run() {
 	go s.rtm.ManageConnection()
 
 	for msg := range s.rtm.IncomingEvents {
@@ -60,7 +60,7 @@ func (s Slackwatch) Run() {
 
 		case *slack.MessageEvent:
 			if ev.Text != "" {
-				m := newMessage(ev.Timestamp, ev.Channel, ev.User, ev.Text, &s)
+				m := newMessage(ev.Timestamp, ev.Channel, ev.User, ev.Text, s)
 				s.messageReceived(m)
 			}
 
@@ -121,7 +121,7 @@ func (s Slackwatch) Run() {
 	}
 }
 
-func (s Slackwatch) messageReceived(m Message) {
+func (s *Slackwatch) messageReceived(m Message) {
 	if m.IsFromMe() && m.Channel == "DM" {
 		if s.processCommand(m) {
 			return

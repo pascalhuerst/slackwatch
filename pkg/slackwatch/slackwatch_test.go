@@ -32,34 +32,34 @@ func TestSlackwatch(t *testing.T) {
 	if *sw.outputAll {
 		t.Error("outputAll began as true")
 	}
-	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", sw))
 	if !*sw.outputAll {
 		t.Error("outputAll failed to turn on")
 	}
-	sw.messageReceived(newMessage("123", "D231", "U123", "!quiet", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!quiet", sw))
 	if *sw.outputAll {
-		t.Error("outputAll faild to turn off")
+		t.Error("outputAll failed to turn off")
 	}
 
 	if !*sw.armed {
 		t.Error("armed began as false")
 	}
-	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", sw))
 	if *sw.outputAll {
 		t.Error("armed failed to turn off")
 	}
-	sw.messageReceived(newMessage("123", "D231", "U123", "!arm", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!arm", sw))
 	if !*sw.armed {
-		t.Error("armed faild to turn on")
+		t.Error("armed failed to turn on")
 	}
 
 	// todo: we need to mock s.rtm.NewOutgoingMessage so we can verify these
-	sw.messageReceived(newMessage("123", "D231", "U123", "!status", &sw))
-	sw.messageReceived(newMessage("123", "D231", "U123", "!help", &sw))
-	sw.messageReceived(newMessage("123", "D231", "U123", "!invalid", &sw))
-	sw.messageReceived(newMessage("123", "D231", "U123", "!help", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!status", sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!help", sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!invalid", sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!help", sw))
 
-	sw.messageReceived(newMessage("123", "D231", "U123", "hello", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "hello", sw))
 	time.Sleep(1 * time.Second)
 	if !fileExists(filepath) {
 		t.Error("touch file action failed to execute")
@@ -67,18 +67,18 @@ func TestSlackwatch(t *testing.T) {
 		os.Remove(filepath)
 	}
 
-	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", &sw))
-	sw.messageReceived(newMessage("123", "D231", "U123", "hello", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "hello", sw))
 	time.Sleep(1 * time.Second)
 	if fileExists(filepath) {
 		t.Error("touch file action executed when disarmed")
 		os.Remove(filepath)
 	}
 
-	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", &sw))
+	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", sw))
 
 	// TODO capture log.Print
-	sw.messageReceived(newMessage("123", "C123", "U321", "hello", &sw))
+	sw.messageReceived(newMessage("123", "C123", "U321", "hello", sw))
 
 }
 
