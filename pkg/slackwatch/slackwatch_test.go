@@ -14,8 +14,8 @@ func TestSlackwatch(t *testing.T) {
 	filepath := "/tmp/slackwatchtest-" + strconv.Itoa(os.Getpid())
 	config := Config{
 		SlackToken: "xoxp-123",
-		Actions: []*DefaultAction{
-			&DefaultAction{Command: "/usr/bin/touch", Args: filepath},
+		Actions: []Action{
+			&CommandAction{Command: "/usr/bin/touch", Args: filepath},
 		},
 	}
 

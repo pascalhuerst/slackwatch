@@ -30,7 +30,7 @@ type Slackwatch struct {
 	config             *Config
 }
 
-// New creates a slackwatch instance
+// New creates a slackwatch instance and returns a pointer to it.
 func New(config Config) *Slackwatch {
 	s := Slackwatch{
 		api:                slack.New(config.SlackToken),

@@ -1,60 +1,51 @@
 package slackwatch
 
 import (
-	"fmt"
 	"net/http"
 	"os/exec"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
-// An Action 's execute method is called when an interesting message is received.
+// An Action 's execute method is called when an interesting message is
+// received if armed.
 type Action interface {
 	Execute(Message)
 }
 
-// DefaultAction supports two types of common actions, Command, and URL. For
-// URLs, if Body is provided an HTTP Post is performed, otherwise an HTTP Get.
-type DefaultAction struct {
+// URLAction specifies an HTTP request to make on Alert
+type URLAction struct {
+	URL  string
+	Body string
+}
+
+// Execute is called to make the HTTP request
+func (u URLAction) Execute(m Message) {
+	var res *http.Response
+	var err error
+	if u.Body != "" {
+		res, err = http.Post(u.URL, "application/octet-stream", strings.NewReader(u.Body))
+	} else {
+		res, err = http.Get(u.URL)
+	}
+	res.Body.Close()
+	if err != nil {
+		log.Errorf("Error requesting %s: %v", u.URL, err)
+	}
+}
+
+// CommandAction specifies a command to execute on Alert
+type CommandAction struct {
 	Command string
 	Args    string
-	URL     string
-	Body    string
 }
 
-// Execute runs the specified command or preforms an HTTP request.
-func (a DefaultAction) Execute(m Message) {
-	if a.Command != "" {
-		a.runCommand()
-	}
-	if a.URL != "" {
-		if a.Body != "" {
-			a.postURL()
-		} else {
-			a.getURL()
-		}
-	}
-}
-
-func (a DefaultAction) runCommand() {
-	cmd := exec.Command(a.Command, a.Args)
+// Execute is called to run the command.
+func (c CommandAction) Execute(m Message) {
+	cmd := exec.Command(c.Command, c.Args)
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println("Error running", a.Command, err)
+		log.Errorf("Error running %s: %v", c.Command, err)
 	}
-}
-
-func (a DefaultAction) postURL() {
-	res, err := http.Post(a.URL, "application/octet-stream", strings.NewReader(a.Body))
-	if err != nil {
-		fmt.Println("Error POSTing", a.URL, err)
-	}
-	res.Body.Close()
-}
-
-func (a DefaultAction) getURL() {
-	res, err := http.Get(a.URL)
-	if err != nil {
-		fmt.Println("Error GETing", a.URL, err)
-	}
-	res.Body.Close()
 }
