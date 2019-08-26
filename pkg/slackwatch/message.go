@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-// Message represents an incomming message
+// Message represents an incoming message
 type Message struct {
 	Timestamp string
 	ChannelID string // of the form C02G9FMGB
-	Channel   string // without preceeding #
+	Channel   string // without preceding #
 	UserID    string // of the form U3L6DT8P3
 	User      string
 	Text      string // raw text of the message, you probably want DetokenizedText()

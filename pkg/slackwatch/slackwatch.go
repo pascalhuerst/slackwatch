@@ -15,7 +15,7 @@ package slackwatch
 
 import (
 	"github.com/nlopes/slack"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 // Slackwatch struct holds state. You should call New(config) rather than creating it yourself.
@@ -51,11 +51,11 @@ func (s *Slackwatch) Run() {
 	for msg := range s.rtm.IncomingEvents {
 		switch ev := msg.Data.(type) {
 		case *slack.ConnectedEvent:
-			log.Info("Connected")
+			logrus.Info("Connected")
 			s.me = ev.Info.User
 
 		case *slack.DisconnectedEvent:
-			log.Error("Disconnected")
+			logrus.Error("Disconnected")
 
 		case *slack.MessageEvent:
 			if ev.Text != "" {
@@ -69,19 +69,19 @@ func (s *Slackwatch) Run() {
 				name = "DM"
 			}
 			s.alert(Message{Channel: ev.Channel.Name, Text: "Channel Joined"})
-			log.Info("* Joined to new channel", name)
+			logrus.Info("* Joined to new channel", name)
 
 		case *slack.IncomingEventError:
-			log.Errorf("Incoming Event Error: %v", ev)
+			logrus.Errorf("Incoming Event Error: %v", ev)
 
 		case *slack.ConnectionErrorEvent:
-			log.Errorf("Connection Error: %v", ev)
+			logrus.Errorf("Connection Error: %v", ev)
 
 		case *slack.RTMError:
-			log.Errorf("Error: %s\n", ev.Error())
+			logrus.Errorf("Error: %s\n", ev.Error())
 
 		case *slack.InvalidAuthEvent:
-			log.Fatal("Invalid credentials")
+			logrus.Fatal("Invalid credentials")
 			return
 
 		// some types we don't care about
@@ -115,7 +115,7 @@ func (s *Slackwatch) Run() {
 		case *slack.PrefChangeEvent:
 
 		default:
-			log.Printf("Unknown Event '%T': %v", ev, ev)
+			logrus.Printf("Unknown Event '%T': %v", ev, ev)
 		}
 	}
 }
@@ -128,7 +128,7 @@ func (s *Slackwatch) messageReceived(m Message) {
 	}
 
 	if m.IsInteresting() {
-		log.Print(m.String())
+		logrus.Print(m.String())
 		s.alert(m)
 	} else {
 		if s.outputAll {
@@ -136,7 +136,7 @@ func (s *Slackwatch) messageReceived(m Message) {
 			if len(string) > 60 {
 				string = string[:60]
 			}
-			log.Print(string)
+			logrus.Print(string)
 		}
 	}
 }

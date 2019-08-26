@@ -5,11 +5,11 @@ import (
 	"time"
 
 	"github.com/mikegrb/slackwatch/pkg/slackwatch"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	log.SetFormatter(&log.TextFormatter{
+	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp:   true,
 		TimestampFormat: "15:04:05",
 	})
@@ -23,7 +23,7 @@ func main() {
 func runSlackwatch() {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Print("Recovered from panic:", r)
+			logrus.Errorf("Recovered from panic: %v", r)
 		}
 	}()
 

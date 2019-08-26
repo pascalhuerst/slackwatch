@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 // An Action 's execute method is called when an interesting message is
@@ -31,7 +31,7 @@ func (u URLAction) Execute(m Message) {
 	}
 	res.Body.Close()
 	if err != nil {
-		log.Errorf("Error requesting %s: %v", u.URL, err)
+		logrus.Errorf("Error requesting %s: %v", u.URL, err)
 	}
 }
 
@@ -46,6 +46,6 @@ func (c CommandAction) Execute(m Message) {
 	cmd := exec.Command(c.Command, c.Args)
 	err := cmd.Run()
 	if err != nil {
-		log.Errorf("Error running %s: %v", c.Command, err)
+		logrus.Errorf("Error running %s: %v", c.Command, err)
 	}
 }
