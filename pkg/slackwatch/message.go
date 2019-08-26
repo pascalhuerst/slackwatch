@@ -41,6 +41,11 @@ func ts(ts string) string {
 	return tm.Format("15:04:05")
 }
 
+// String returns a string representation of the detokenized text preceded by
+// the channel and username, suitable for logging or showing to the user.
+// * [general] <user2> hello @user1
+// The initial asterisk or space indicates if the message is considered
+// interesting, see IsInteresting.
 func (m Message) String() string {
 	interesting := " "
 	if m.IsInteresting() {

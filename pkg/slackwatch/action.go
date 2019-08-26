@@ -14,7 +14,8 @@ type Action interface {
 	Execute(Message)
 }
 
-// URLAction specifies an HTTP request to make on Alert
+// URLAction specifies an HTTP request to make on Alert. If Body is provided,
+// an HTTP post is made, otherwise, an HTTP get.
 type URLAction struct {
 	URL  string
 	Body string
