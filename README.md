@@ -1,6 +1,8 @@
 # slackwatch
 Run some commands or hit some URLs when DMed on Slack
 
+[![GoDoc](https://godoc.org/github.com/mikegrb/slackwatch/pkg/slackwatch?status.svg)](https://godoc.org/github.com/mikegrb/slackwatch/pkg/slackwatch)
+
 Create a .slackwatch config file in your home directory. See config.json for an example. If a URL is specified, the presence of a Body determines an HTTP GET or POST.
 
 ```
