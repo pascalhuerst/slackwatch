@@ -10,8 +10,10 @@ Create a .slackwatch config file in your home directory. See config.json for an 
      "SlackToken": "xoxp-123-543",
      "Actions": [
        { "Command": "/usr/bin/afplay", "Args": "klaxon.wav" },
-       { "URL": "https://hassio.local/api/services/homeassistant/turn_on?api_password=letmein",
-         "Body": "{\"entity_id\":\"switch.bat_signal\"}"
+       {
+         "URL": "https://hassio.local/api/services/homeassistant/turn_on?api_password=letmein",
+         "Body": "{\"entity_id\":\"switch.bat_signal\"}",
+         "ContentType": "application/javascript"
        }
      ]
    }

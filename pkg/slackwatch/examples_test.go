@@ -12,7 +12,11 @@ func Example() {
 		Actions: []slackwatch.Action{
 			slackwatch.CommandAction{Command: "/usr/bin/afplay", Args: "klaxon.wav"},
 			slackwatch.URLAction{URL: "https://example.com/trigger_action"},
-			slackwatch.URLAction{URL: "https://example.com/other_endpoint", Body: "Slackwatch Triggered"},
+			slackwatch.URLAction{
+				URL:         "https://example.com/other_endpoint",
+				Body:        "Slackwatch Triggered",
+				ContentType: "application/javascript",
+			},
 		},
 	}
 

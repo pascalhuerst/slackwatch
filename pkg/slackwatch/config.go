@@ -17,10 +17,8 @@ type jsonConfig struct {
 }
 
 type defaultAction struct {
-	Command string
-	Args    string
-	URL     string
-	Body    string
+	CommandAction
+	URLAction
 }
 
 // NewConfigFromFile parses a json formatted config file and returns a Config.
@@ -42,7 +40,7 @@ func NewConfigFromFile(path string) Config {
 			action = append(action, CommandAction{Command: a.Command, Args: a.Args})
 		}
 		if a.URL != "" {
-			action = append(action, URLAction{URL: a.URL, Body: a.Body})
+			action = append(action, URLAction{URL: a.URL, Body: a.Body, ContentType: a.ContentType})
 		}
 	}
 
