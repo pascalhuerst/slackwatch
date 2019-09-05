@@ -72,6 +72,11 @@ func (m Message) IsInteresting() bool {
 	if m.Channel == "DM" {
 		return true
 	}
+
+	if m.IsInterestingChannel() {
+		return true
+	}
+
 	if strings.HasPrefix(m.Channel, "mpdm-") {
 		return true
 	}
@@ -80,6 +85,16 @@ func (m Message) IsInteresting() bool {
 		return true
 	}
 
+	return false
+}
+
+// IsInterestingChannel returns true if the channel is on the watch list.
+func (m Message) IsInterestingChannel() bool {
+	for _, c := range m.sw.interestingChan {
+		if c == m.Channel {
+			return true
+		}
+	}
 	return false
 }
 

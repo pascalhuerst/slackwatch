@@ -12,7 +12,8 @@ func (s *Slackwatch) processCommand(m Message) bool {
 		return false
 	}
 
-	switch m.Text {
+	command := strings.Fields(m.Text)[0]
+	switch command {
 	case "!arm":
 		s.armed = true
 		logrus.Info("Armed")
@@ -29,6 +30,14 @@ func (s *Slackwatch) processCommand(m Message) bool {
 		s.outputAll = false
 		logrus.Info("Quiet Set")
 		s.sendStatus(m.ChannelID)
+	case "!chanls":
+		s.sendChannels(m.ChannelID)
+	case "!chanadd":
+		s.addChannel(m)
+		s.sendChannels(m.ChannelID)
+	case "!chanrm":
+		s.rmChannel(m)
+		s.sendChannels(m.ChannelID)
 	case "!status":
 		s.sendStatus(m.ChannelID)
 	case "!help":
@@ -38,6 +47,28 @@ func (s *Slackwatch) processCommand(m Message) bool {
 	}
 
 	return true
+}
+
+func (s *Slackwatch) addChannel(m Message) {
+	channel := strings.TrimPrefix(m.DetokenizedText(), "!chanadd ")
+	s.interestingChan = append(s.interestingChan, channel)
+
+}
+
+func (s *Slackwatch) rmChannel(m Message) {
+	channel := strings.TrimPrefix(m.DetokenizedText(), "!chanrm ")
+	newChans := make([]string, 0)
+	for _, c := range s.interestingChan {
+		if c != channel {
+			newChans = append(newChans, c)
+		}
+	}
+	s.interestingChan = newChans
+}
+
+func (s *Slackwatch) sendChannels(channelID string) {
+	message := strings.Join(s.interestingChan, ", ")
+	s.rtm.SendMessage(s.rtm.NewOutgoingMessage("Current watched channels: "+message, channelID))
 }
 
 func (s *Slackwatch) sendStatus(channelID string) {
