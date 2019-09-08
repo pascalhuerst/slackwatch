@@ -23,11 +23,11 @@ func (s *Slackwatch) processCommand(m Message) bool {
 		logrus.Info("Disarmed")
 		s.sendStatus(m.ChannelID)
 	case "!verbose":
-		s.outputAll = true
+		s.verbose = true
 		logrus.Info("Verbose Set")
 		s.sendStatus(m.ChannelID)
 	case "!quiet":
-		s.outputAll = false
+		s.verbose = false
 		logrus.Info("Quiet Set")
 		s.sendStatus(m.ChannelID)
 	case "!chanls":
@@ -71,7 +71,7 @@ func (s *Slackwatch) sendChannels(channelID string) {
 }
 
 func (s *Slackwatch) sendStatus(channelID string) {
-	status := fmt.Sprintf("armed: %v, outputAll: %v", s.armed, s.outputAll)
+	status := fmt.Sprintf("armed: %v, verbose: %v", s.armed, s.verbose)
 	s.rtm.SendMessage(s.rtm.NewOutgoingMessage(status, channelID))
 }
 

@@ -27,7 +27,7 @@ type Slackwatch struct {
 	api                *slack.Client
 	rtm                *slack.RTM
 	armed              bool
-	outputAll          bool
+	verbose            bool
 	config             *Config
 }
 
@@ -39,7 +39,7 @@ func New(config Config) *Slackwatch {
 		conversationLookup: make(map[string]string),
 		interestingChan:    make([]string, 0),
 		armed:              true,
-		outputAll:          false,
+		verbose:            false,
 		config:             &config,
 	}
 	s.rtm = s.api.NewRTM()
@@ -108,6 +108,7 @@ func (s *Slackwatch) Run() {
 		case *slack.GroupMarkedEvent:
 		case *slack.ChannelMarkedEvent:
 		case *slack.ChannelCreatedEvent:
+		case *slack.ChannelLeftEvent:
 		case *slack.ChannelArchiveEvent:
 		case *slack.IMMarkedEvent:
 		case *slack.PinAddedEvent:
@@ -133,7 +134,7 @@ func (s *Slackwatch) messageReceived(m Message) {
 		logrus.Print(m.String())
 		s.alert(m)
 	} else {
-		if s.outputAll {
+		if s.verbose {
 			string := m.String()
 			if len(string) > 60 {
 				string = string[:60]

@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/nlopes/slack"
+	"github.com/sirupsen/logrus/hooks/test"
 )
 
 func TestSlackwatch(t *testing.T) {
@@ -32,21 +32,21 @@ func TestSlackwatch(t *testing.T) {
 	sw.conversationLookup["G123"] = "mpdm--user1--user2--user3--1"
 
 	// Verbose/Quiet
-	if sw.outputAll {
-		t.Error("outputAll began as true")
+	if sw.verbose {
+		t.Error("verbose began as true")
 	}
 
 	sw.messageReceived(newMessage("123", "D231", "U123", "!verbose", sw))
-	if !sw.outputAll {
-		t.Error("outputAll failed to turn on")
+	if !sw.verbose {
+		t.Error("verbose failed to turn on")
 	}
 	if hook.LastEntry().Message != "Verbose Set" {
-		t.Error("failed to generate verbose message in log")
+		t.Error("verbose to generate verbose message in log")
 	}
 
 	sw.messageReceived(newMessage("123", "D231", "U123", "!quiet", sw))
-	if sw.outputAll {
-		t.Error("outputAll failed to turn off")
+	if sw.verbose {
+		t.Error("verbose failed to turn off")
 	}
 	if hook.LastEntry().Message != "Quiet Set" {
 		t.Error("failed to generate quiet message in log")
@@ -58,7 +58,7 @@ func TestSlackwatch(t *testing.T) {
 	}
 
 	sw.messageReceived(newMessage("123", "D231", "U123", "!disarm", sw))
-	if sw.outputAll {
+	if sw.armed {
 		t.Error("armed failed to turn off")
 	}
 	if hook.LastEntry().Message != "Disarmed" {
