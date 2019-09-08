@@ -52,7 +52,6 @@ func (s *Slackwatch) processCommand(m Message) bool {
 func (s *Slackwatch) addChannel(m Message) {
 	channel := strings.TrimPrefix(m.DetokenizedText(), "!chanadd ")
 	s.interestingChan = append(s.interestingChan, channel)
-
 }
 
 func (s *Slackwatch) rmChannel(m Message) {
@@ -77,6 +76,7 @@ func (s *Slackwatch) sendStatus(channelID string) {
 }
 
 func (s *Slackwatch) sendHelp(channelID string) {
-	text := "!arm !disarm !verbose !quiet !status !help"
+	text := "!arm !disarm !verbose !quiet !status !help\n" +
+		"For watched channels: !chanls !chanadd <channel w/o #>, !chanrm <channel w/o #>"
 	s.rtm.SendMessage(s.rtm.NewOutgoingMessage(text, channelID))
 }
