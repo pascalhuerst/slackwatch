@@ -73,7 +73,7 @@ func (m Message) IsInteresting() bool {
 		return true
 	}
 
-	if m.IsInterestingChannel() {
+	if m.IsWatchedChannel() {
 		return true
 	}
 
@@ -88,9 +88,9 @@ func (m Message) IsInteresting() bool {
 	return false
 }
 
-// IsInterestingChannel returns true if the channel is on the watch list.
-func (m Message) IsInterestingChannel() bool {
-	for _, c := range m.sw.interestingChan {
+// IsWatchedChannel returns true if the channel is on the watch list.
+func (m Message) IsWatchedChannel() bool {
+	for _, c := range m.sw.watchedChan {
 		if c == m.Channel {
 			return true
 		}

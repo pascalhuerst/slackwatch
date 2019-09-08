@@ -22,7 +22,7 @@ import (
 type Slackwatch struct {
 	userLookup         map[string]string
 	conversationLookup map[string]string
-	interestingChan    []string
+	watchedChan        []string
 	me                 *slack.UserDetails
 	api                *slack.Client
 	rtm                *slack.RTM
@@ -37,7 +37,7 @@ func New(config Config) *Slackwatch {
 		api:                slack.New(config.SlackToken),
 		userLookup:         make(map[string]string),
 		conversationLookup: make(map[string]string),
-		interestingChan:    make([]string, 0),
+		watchedChan:        make([]string, 0),
 		armed:              true,
 		verbose:            false,
 		config:             &config,

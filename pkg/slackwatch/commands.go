@@ -51,22 +51,22 @@ func (s *Slackwatch) processCommand(m Message) bool {
 
 func (s *Slackwatch) addChannel(m Message) {
 	channel := strings.TrimPrefix(m.DetokenizedText(), "!chanadd ")
-	s.interestingChan = append(s.interestingChan, channel)
+	s.watchedChan = append(s.watchedChan, channel)
 }
 
 func (s *Slackwatch) rmChannel(m Message) {
 	channel := strings.TrimPrefix(m.DetokenizedText(), "!chanrm ")
 	newChans := make([]string, 0)
-	for _, c := range s.interestingChan {
+	for _, c := range s.watchedChan {
 		if c != channel {
 			newChans = append(newChans, c)
 		}
 	}
-	s.interestingChan = newChans
+	s.watchedChan = newChans
 }
 
 func (s *Slackwatch) sendChannels(channelID string) {
-	message := strings.Join(s.interestingChan, ", ")
+	message := strings.Join(s.watchedChan, ", ")
 	s.rtm.SendMessage(s.rtm.NewOutgoingMessage("Current watched channels: "+message, channelID))
 }
 
