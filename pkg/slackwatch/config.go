@@ -7,13 +7,15 @@ import (
 
 // Config is passed to the New constructor.
 type Config struct {
-	SlackToken string
-	Actions    []Action
+	SlackToken      string
+	Actions         []Action
+	WatchedChannels []string
 }
 
 type jsonConfig struct {
-	SlackToken string
-	Actions    []defaultAction
+	SlackToken      string
+	Actions         []defaultAction
+	WatchedChannels []string
 }
 
 type defaultAction struct {
@@ -45,7 +47,8 @@ func NewConfigFromFile(path string) Config {
 	}
 
 	return Config{
-		SlackToken: j.SlackToken,
-		Actions:    action,
+		SlackToken:      j.SlackToken,
+		Actions:         action,
+		WatchedChannels: j.WatchedChannels,
 	}
 }
