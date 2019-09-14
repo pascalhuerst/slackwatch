@@ -37,7 +37,7 @@ func New(config Config) *Slackwatch {
 		api:                slack.New(config.SlackToken),
 		userLookup:         make(map[string]string),
 		conversationLookup: make(map[string]string),
-		watchedChan:        make([]string, 0),
+		watchedChan:        config.WatchedChannels,
 		armed:              true,
 		verbose:            false,
 		config:             &config,

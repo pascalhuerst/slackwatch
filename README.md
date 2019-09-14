@@ -8,6 +8,9 @@ Create a .slackwatch config file in your home directory. See config.json for an 
 ```
    {
      "SlackToken": "xoxp-123-543",
+     "WatchedChannels": [
+       "SuperImportant"
+     ],
      "Actions": [
        { "Command": "/usr/bin/afplay", "Args": "klaxon.wav" },
        {
