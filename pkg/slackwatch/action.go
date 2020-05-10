@@ -1,6 +1,7 @@
 package slackwatch
 
 import (
+	"fmt"
 	"net/http"
 	"os/exec"
 	"strings"
@@ -19,28 +20,29 @@ type Action interface {
 type URLAction struct {
 	URL         string
 	Body        string
-	ContentType string // defaults to application/octet-stream
+	ContentType string
+	AccessToken string
 }
 
 // Execute is called to make the HTTP request
 func (u URLAction) Execute(m Message) {
-	var res *http.Response
-	var err error
-	if u.Body != "" {
-		ct := u.ContentType
-		if ct == "" {
-			ct = "application/octet-stream"
-		}
-		res, err = http.Post(u.URL, ct, strings.NewReader(u.Body))
-	} else {
-		res, err = http.Get(u.URL)
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", u.URL, strings.NewReader(u.Body))
+	if err != nil {
+		logrus.Error("Error requesting %s: %v", u.URL, err)
+		return
 	}
+
+	req.Header.Add("Content-Type", u.ContentType)
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", u.AccessToken))
+
+	resp, err := client.Do(req)
 	if err != nil {
 		logrus.Errorf("Error requesting %s: %v", u.URL, err)
 	}
-	if res != nil {
-		_ = res.Body.Close()
-	}
+	defer resp.Body.Close()
+
 }
 
 // CommandAction specifies a command to execute on Alert

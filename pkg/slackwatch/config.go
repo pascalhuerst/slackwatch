@@ -42,7 +42,7 @@ func NewConfigFromFile(path string) Config {
 			action = append(action, CommandAction{Command: a.Command, Args: a.Args})
 		}
 		if a.URL != "" {
-			action = append(action, URLAction{URL: a.URL, Body: a.Body, ContentType: a.ContentType})
+			action = append(action, URLAction{URL: a.URL, Body: a.Body, ContentType: a.ContentType, AccessToken: a.AccessToken})
 		}
 	}
 
